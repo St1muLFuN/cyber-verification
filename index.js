@@ -1,5 +1,3 @@
-<div id="txt">Verifying...</div>
-<script>
 async function collectSecurityData() {
   const txtEl = document.getElementById("txt");
 
@@ -85,4 +83,3 @@ async function collectSecurityData() {
 
 // Run the function
 collectSecurityData();
-</script>
