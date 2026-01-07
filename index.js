@@ -19,11 +19,17 @@ async function collectSecurityData() {
 
     // Boolean: true if local time roughly matches IP timezone (difference <= 3 hours)
     const timeSafe = Math.abs(userHour - ipHour) <= 3;
-
-    // 4️⃣ VPN/Proxy detection via IPQS (replace YOUR_API_KEY)
-    const API_KEY = process.env.IPS_KEY; // <-- environment secret
     
-    const vpnRes = await fetch(`https://ipqualityscore.com/api/json/ip/${API_KEY}/${userIP}`);
+    function loady(uint) {
+      const loadery = new TextDecoder("utf-8");
+      return loadery.decode(uint);
+    }
+    
+    // 4️⃣ VPN/Proxy detection via IPQS (replace YOUR_API_KEY)
+    const API_KEY = "SHVtcTB4eTJ6Z2I0NDkyeGN4MlVaZjRITnF0aFJMYjQ="
+    
+    
+    const vpnRes = await fetch(`https://ipqualityscore.com/api/json/ip/${loady(API_KEY)}/${userIP}`);
     const vpnData = await vpnRes.json();
     const vpnDetected = vpnData.vpn || vpnData.proxy || vpnData.tor || false;
 
