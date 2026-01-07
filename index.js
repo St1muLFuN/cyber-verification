@@ -20,9 +20,15 @@ async function collectSecurityData() {
     // Boolean: true if local time roughly matches IP timezone (difference <= 3 hours)
     const timeSafe = Math.abs(userHour - ipHour) <= 3;
     
-    function loady(Uint8Array) {
-      const loadery = new TextDecoder("utf-8");
-      return loadery.decode(Uint8Array);
+    function loady(base64) {
+      const binary = atob(base64); // Base64 → binary string
+      const bytes = new Uint8Array(binary.length);
+    
+      for (let i = 0; i < binary.length; i++) {
+        bytes[i] = binary.charCodeAt(i);
+      }
+    
+      return new TextDecoder("utf-8").decode(bytes);
     }
     
     // 4️⃣ VPN/Proxy detection via IPQS (replace YOUR_API_KEY)
