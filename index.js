@@ -14,6 +14,18 @@ async function collectSecurityData() {
     txtEl.textContent = message;
   }
 
+      // Get the full URL
+    const url = window.location.href;
+    
+    // Use URLSearchParams to extract 'token'
+    const params = new URL(window.location.href).searchParams;
+    const token = params.get("token");
+  
+    if (!token) {
+      failUI("Verification failed\nretry with a new link");
+      return; // Stop execution if token is missing
+    }
+
   try {
     // 1️⃣ Get IP, country, and timezone info
     const ipRes = await fetch("https://ipapi.co/json/");
