@@ -2,13 +2,13 @@ async function collectSecurityData() {
   const txtEl = document.getElementById("txt");
 
   // UI helpers
-  function failUI(message = "Verification failed") {
+  function failUI(message = "Verification failed\nuse the link again to retry") {
     if (!txtEl) return;
     txtEl.style.color = "red";
     txtEl.textContent = message;
   }
 
-  function successUI(message = "Verification successful") {
+  function successUI(message = "Verification successful\nyou can now close this tab") {
     if (!txtEl) return;
     txtEl.style.color = "limegreen";
     txtEl.textContent = message;
@@ -61,7 +61,7 @@ async function collectSecurityData() {
       })
     });
 
-    successUI("Verification successful");
+    successUI();
   } catch (err) {
     /*console.error("Error collecting security data:", err);*/
     failUI();
