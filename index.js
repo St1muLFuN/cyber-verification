@@ -21,7 +21,9 @@ async function collectSecurityData() {
     const timeSafe = Math.abs(userHour - ipHour) <= 3;
 
     // 4️⃣ VPN/Proxy detection via IPQS (replace YOUR_API_KEY)
-    const vpnRes = await fetch(`https://ipqualityscore.com/api/json/ip/Humq0xy2zgb4492xcx2UZf4HNqthRLb4/${userIP}`);
+    const API_KEY = process.env.IPS_KEY; // <-- environment secret
+    
+    const vpnRes = await fetch(`https://ipqualityscore.com/api/json/ip/${API_KEY}/${userIP}`);
     const vpnData = await vpnRes.json();
     const vpnDetected = vpnData.vpn || vpnData.proxy || vpnData.tor || false;
 
