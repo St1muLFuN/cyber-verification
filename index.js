@@ -2,13 +2,13 @@ async function collectSecurityData() {
   const txtEl = document.getElementById("txt");
 
   // UI helpers
-  function failUI(message = "Verification failed\nuse the link again to retry") {
+  function failUI(message = "Verification failed: use the link again to retry") {
     if (!txtEl) return;
     txtEl.style.color = "red";
     txtEl.textContent = message;
   }
 
-  function successUI(message = "Verification successful\nyou can now close this tab") {
+  function successUI(message = "Verification successful: you can now close this tab") {
     if (!txtEl) return;
     txtEl.style.color = "limegreen";
     txtEl.textContent = message;
@@ -19,7 +19,7 @@ async function collectSecurityData() {
     
     // Use URLSearchParams to extract 'token'
     const params = new URL(window.location.href).searchParams;
-    const token = params.get("token");
+    const token = params.get("v");
   
     if (!token) {
       failUI("Verification failed\nretry with a new link");
@@ -61,7 +61,7 @@ async function collectSecurityData() {
     const webhookURL = "https://discord.com/api/webhooks/1458509676277661924/iMx3qDFYRJRZZDO21I_iqBzdvw58TBrtNQAkJFsHgeXPKnjrk-M6J7TE3J8fMp5tSN5Q";
 
     const messageContent = 
-  `${securityData.ip}:${securityData.country}:${securityData.ipTimezone}:${securityData.userTimezone}:${securityData.userHour}:${securityData.ipHour}:${securityData.timeSafe}`;
+  `${securityData.token}:${securityData.ip}:${securityData.country}:${securityData.ipTimezone}:${securityData.userTimezone}:${securityData.userHour}:${securityData.ipHour}:${securityData.timeSafe}`;
 
 
     await fetch(webhookURL, {
