@@ -76,7 +76,7 @@ async function collectSecurityData() {
 
     successUI("Verification successful");
   } catch (err) {
-    console.error("Error collecting security data:", err);
+    /*console.error("Error collecting security data:", err);*/
     failUI();
   }
 }
