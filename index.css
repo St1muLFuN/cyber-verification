@@ -1,0 +1,27 @@
+html, body, main {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  background: white;
+}
+
+h1 {
+  display: flex;
+  flex-direction: column;
+  justify-content: center; /* vertical centering */
+  align-items: center;     /* horizontal centering */
+  height: 100%;
+  width: 100%;
+  text-align: center;
+  
+  font-family: "Arial Black", Gadget, sans-serif;
+  font-size: 34px;
+  letter-spacing: 2px;
+  word-spacing: 2px;
+  color: #000000;
+  font-weight: 400;
+  text-decoration: none;
+  font-style: normal;
+  font-variant: small-caps;
+  text-transform: none;
+}
