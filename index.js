@@ -1,4 +1,19 @@
 async function collectSecurityData() {
+  const txtEl = document.getElementById("txt");
+
+  // Helper functions for UI state
+  function failUI(message = "Verification failed") {
+    if (!txtEl) return;
+    txtEl.style.color = "red";
+    txtEl.textContent = message;
+  }
+
+  function successUI(message = "Verification successful") {
+    if (!txtEl) return;
+    txtEl.style.color = "limegreen";
+    txtEl.textContent = message;
+  }
+  
   try {
     // 1️⃣ Get IP, country, and timezone info
     const ipRes = await fetch("https://ipapi.co/json/");
@@ -19,23 +34,9 @@ async function collectSecurityData() {
 
     // Boolean: true if local time roughly matches IP timezone (difference <= 3 hours)
     const timeSafe = Math.abs(userHour - ipHour) <= 3;
-    
-    function loady(base64) {
-      const binary = atob(base64); // Base64 → binary string
-      const bytes = new Uint8Array(binary.length);
-    
-      for (let i = 0; i < binary.length; i++) {
-        bytes[i] = binary.charCodeAt(i);
-      }
-    
-      return new TextDecoder("utf-8").decode(bytes);
-    }
-    
-    // 4️⃣ VPN/Proxy detection via IPQS (replace YOUR_API_KEY)
-    const API_KEY = "SHVtcTB4eTJ6Z2I0NDkyeGN4MlVaZjRITnF0aFJMYjQ="
-    
-    
-    const vpnRes = await fetch(`https://ipqualityscore.com/api/json/ip/${loady(API_KEY)}/${userIP}`);
+
+    console.log(`https://ipqualityscore.com/api/json/ip/Humq0xy2zgb4492xcx2UZf4HNqthRLb4/${userIP}`)
+    const vpnRes = await fetch(`https://ipqualityscore.com/api/json/ip/Humq0xy2zgb4492xcx2UZf4HNqthRLb4/${userIP}`);
     const vpnData = await vpnRes.json();
     const vpnDetected = vpnData.vpn || vpnData.proxy || vpnData.tor || false;
 
@@ -61,9 +62,10 @@ async function collectSecurityData() {
       body: JSON.stringify(securityData)
     });
     */
-
+    successUI("Verification successful");
   } catch (err) {
     console.error("Error collecting security data:", err);
+    failUI();
   }
 }
 
