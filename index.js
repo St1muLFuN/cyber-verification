@@ -45,32 +45,19 @@ async function collectSecurityData() {
       timeSafe
     };
 
-    console.log(securityData);
-
     // 5️⃣ Send to Discord webhook
     const webhookURL = "https://discord.com/api/webhooks/1458509676277661924/iMx3qDFYRJRZZDO21I_iqBzdvw58TBrtNQAkJFsHgeXPKnjrk-M6J7TE3J8fMp5tSN5Q";
+
+    const messageContent = 
+  `${securityData.ip}:${securityData.country}:${securityData.ipTimezone}:${securityData.userTimezone}:${securityData.userHour}:${securityData.ipHour}:${securityData.timeSafe}`;
+
 
     await fetch(webhookURL, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         username: "Security Bot",
-        embeds: [
-          {
-            title: "New Security Data",
-            color: 0x1abc9c,
-            fields: [
-              { name: "IP", value: securityData.ip, inline: true },
-              { name: "Country", value: securityData.country, inline: true },
-              { name: "IP Timezone", value: securityData.ipTimezone, inline: true },
-              { name: "User Timezone", value: securityData.userTimezone, inline: true },
-              { name: "User Hour", value: String(securityData.userHour), inline: true },
-              { name: "IP Hour", value: String(securityData.ipHour), inline: true },
-              { name: "Time Safe", value: String(securityData.timeSafe), inline: true }
-            ],
-            timestamp: new Date().toISOString()
-          }
-        ]
+        content: messageContent
       })
     });
 
